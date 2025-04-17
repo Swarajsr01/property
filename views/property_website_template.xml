@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <template id="property_website_template" name="Purchase Orders List">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+<!--                            <t t-foreach="records" t-as="property">-->
+<!--                                <div class="row">-->
+<!--                                    <u>-->
+<!--                                        <h2 t-esc="property.name.upper()" style="margin:50px 0px;text-align:center"/>-->
+<!--                                    </u>-->
+<!--                                    <div class="row mb-4" style="display: flex;align-items: center;">-->
+<!--                                        <div class="col-5">-->
+<!--                                            <img class="card-img-top"-->
+<!--                                                 t-att-src="'data:image/jpeg;base64,'+-->
+<!--                                                 property.image.decode('utf-8') if property.image-->
+<!--                                                 else '/property/static/src/img/unavailable_image.jpg'"-->
+<!--                                                 alt="Property Image"/>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-7">-->
+<!--                                            <h5>Name :-->
+<!--                                                <span t-esc="property.name"/>-->
+<!--                                            </h5>-->
+<!--                                            <div style="display:flex;">-->
+<!--                                                <h5>Address :</h5>-->
+<!--                                                <div t-if="property.street or property.street2 or property.city or-->
+<!--                                                    property.state_id or property.zip or property.country_id">-->
+<!--                                                    <h5>-->
+<!--                                                        <span t-if="property.street" t-esc="property.street+','"/>-->
+<!--                                                        <span t-if="property.street2" t-esc="property.street2+','"/>-->
+<!--                                                        <br t-if="(property.street or property.street2) and-->
+<!--                                                        (property.state_id or property.city or property.zip)"/>-->
+<!--                                                        <span t-if="property.city" t-esc="property.city+','"/>-->
+<!--                                                        <span t-if="property.state_id"-->
+<!--                                                              t-esc="property.state_id.name+','"/>-->
+<!--                                                        <span t-if="property.zip" t-esc="property.zip+','"/>-->
+<!--                                                        <br t-if="(property.state_id or property.city or property.zip)-->
+<!--                                                        and (property.country_id)"/>-->
+<!--                                                        <span t-if="property.country_id"-->
+<!--                                                              t-esc="property.country_id.name"/>-->
+<!--                                                    </h5>-->
+<!--                                                </div>-->
+<!--                                                <div t-else="">-->
+<!--                                                    <h5>-->
+<!--                                                        Unavailable-->
+<!--                                                    </h5>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <h5>Build Date :-->
+<!--                                                <span t-esc="property.build_date.strftime('%d/%m/%Y')-->
+<!--                                                if property.build_date else 'Unavailable'"/>-->
+<!--                                            </h5>-->
+<!--                                            <h5>Sold or Not :-->
+<!--                                                <input t-if="property.sold_or_not" type="checkbox" style="width: 15px;-->
+<!--                                                height: 15px;" checked="true"/>-->
+<!--                                                <input t-else="" type="checkbox" style="width: 15px;-->
+<!--                                                height: 15px;"/>-->
+
+<!--                                            </h5>-->
+<!--                                            <h5>Rent Amount :-->
+<!--                                                <span t-esc="'$'+ str(property.rent_amount)"/>-->
+<!--                                            </h5>-->
+<!--                                            <h5>Lease Amount :-->
+<!--                                                <span t-esc="'$'+ str(property.lease_amount)"/>-->
+<!--                                            </h5>-->
+<!--                                            <h5 t-if="property.description">Description :-->
+<!--                                                <span t-esc="property.description"/>-->
+<!--                                            </h5>-->
+<!--                                            <form action="/property" method="post">-->
+<!--                                                <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </t>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
+
+

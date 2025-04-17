@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <!--automated action to send mail -->
+    <record id="ir_cron_action_to_do" model="ir.cron">
+        <field name="name">Expiry rent order mail</field>
+        <field name="model_id" ref="property.model_rent_management"/>
+        <field name="state">code</field>
+        <field name="code">model.action_cron_rent_expiry()</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+        <field name="priority">1</field>
+    </record>
+</odoo>

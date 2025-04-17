@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    rent report template-->
+    <template id="report_rent_report_details">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure">
+                        <table class="table table-bordered">
+                            <h2 style="text-align: center;padding-bottom:5%;">Rent Report</h2>
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <t t-if="data.get('from_date')">
+                                        <h5>From Date :
+                                            <t t-esc="data.get('from_date')"/>
+                                        </h5>
+                                    </t>
+                                </div>
+                                <div class="col">
+                                    <t t-if="data.get('to_date')">
+                                        <h5>To Date :
+                                            <t t-esc="data.get('to_date')"/>
+                                        </h5>
+                                    </t>
+                                </div>
+                            </div>
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-center">
+                                        <b>Sequence</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>Tenant</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>Property</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>Owner</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>Type</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>Amount</b>
+                                    </th>
+                                    <th class="text-center">
+                                        <b>State</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="data.get('report')">
+                                    <t t-foreach="data.get('report')" t-as="row">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="row.get('sequence')"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="row.get('tenant')"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="row.get('property')"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="row.get('owner')"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="row.get('type')"/>
+                                            </td>
+                                            <td class="text-end">
+                                                $<t t-esc="row.get('amount')"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="row.get('state')"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
