@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <template id="properties_website_template" name="Properties List">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                    <div class="container">
+                        <form action="/property" method="post">
+                            <div class="row mb- border" style="padding:25px 0px;margin:20px 10px">
+                                <div class="col-6">
+                                    <span>Tenant :
+                                        <input type="text" name="name" placeholder="Name"
+                                               style="width:70%; height:40px;"/>
+                                    </span><br/>
+                                    <span>E-mail :
+                                        <input type="email" name="email" placeholder="Email"
+                                               style="width:70%; height:40px;"/>
+                                    </span><br/>
+                                    <span>Phone :
+                                        <input type="text" name="phone" placeholder="Phone"
+                                               style="width:70%; height:40px;"/>
+                                    </span><br/>
+                                    <span>Start Date :
+                                        <input type="text" name="start_date" placeholder="Start Date"
+                                               style="width:70%; height:40px;"/>
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <span>Type :
+                                        <select class="form-select" id="exampleSelect" style="width:40%; height:40px;">
+                                            <option value="rent">Rent</option>
+                                            <option value="lease">Lease</option>
+                                        </select>
+                                    </span>
+                                    <br/>
+                                    <span>End Date :
+                                        <input type="date" name="end_date" placeholder="End Date"
+                                               style="width:40%; height:40px;"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="text" name="property" placeholder="Property" style="height:40px;"/>
+                                <input type="text" name="amount" placeholder="Amount" style="height:40px;"/>
+                                <input type="text" name="total_amount" placeholder="Total Amount" style="height:40px;"/>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Book Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>
+        <!--                            <t t-foreach="records" t-as="properties_group">-->
+        <!--                                <div class="row">-->
+        <!--                                    <t t-foreach="properties_group" t-as="property">-->
+        <!--                                        <div class="col-md-3">-->
+        <!--                                            <a t-attf-href="/property/{{ slug(property) }}"-->
+        <!--                                               style="text-decoration:none;">-->
+        <!--                                                <div class="card mb-4 mx-auto d-block" style="border:2px solid gray;">-->
+        <!--                                                    <div class="d-flex justify-content-center"-->
+        <!--                                                         style="width: 100%; height: 250px;">-->
+        <!--                                                        <img class="card-img-top"-->
+        <!--                                                             t-att-src="'data:image/jpeg;base64,'+-->
+        <!--                                                             property.image.decode('utf-8') if property.image-->
+        <!--                                                             else '/property/static/src/img/unavailable_image.jpg'"-->
+        <!--                                                             alt="Property Image"/>-->
+        <!--                                                    </div>-->
+        <!--                                                    <div class="card-body">-->
+        <!--                                                        <p>Property Name :-->
+        <!--                                                            <span t-esc="property.name"/>-->
+        <!--                                                        </p>-->
+        <!--                                                        <p>Property Owner :-->
+        <!--                                                            <span t-esc="property.owner_id.name"/>-->
+        <!--                                                        </p>-->
+        <!--                                                        <p>Build Date :-->
+        <!--                                                            <span t-esc="property.build_date.strftime('%d/%m/%Y')-->
+        <!--                                                            if property.build_date else 'unavailable'"/>-->
+        <!--                                                        </p>-->
+        <!--                                                    </div>-->
+        <!--                                                </div>-->
+        <!--                                            </a>-->
+        <!--                                        </div>-->
+        <!--                                    </t>-->
+        <!--                                </div>-->
+        <!--                            </t>-->
+        <!-- </t>-->
+        <!--    </template>-->
+        <!--</odoo>-->
+
+

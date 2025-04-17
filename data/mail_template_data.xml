@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <!--action confirm mail template-->
+    <record id="mail_template_rent_order_confirm" model="mail.template">
+        <field name="name">Rent confirm template</field>
+        <field name="model_id" ref="property.model_rent_management"/>
+        <field name="subject">"Rent order Confirmed"</field>
+        <field name="email_from">{{ (object.company_id.email) }}</field>
+        <field name="partner_to">{{ object.tenant_id.id }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>
+                    Hello,
+                    <t t-out="object.tenant_id.name"/>
+                    <br/>
+                    Your rent order is confirmed by Mitchell Admin
+                </p>
+            </div>
+        </field>
+    </record>
+    <!--       action cancel mail template-->
+    <record id="mail_template_rent_order_closed" model="mail.template">
+        <field name="name">Rent cancel template</field>
+        <field name="model_id" ref="property.model_rent_management"/>
+        <field name="subject">"Rent order Closed"</field>
+        <field name="email_from">{{ (object.company_id.email) }}</field>
+        <field name="partner_to">{{ object.tenant_id.id }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>
+                    Hello,
+                    <t t-out="object.tenant_id.name"/>
+                    <br/>
+                    Your rent order is closed by Mitchell Admin
+                </p>
+            </div>
+        </field>
+    </record>
+    <!--       action expired mail template-->
+    <record id="mail_template_rent_order_expired" model="mail.template">
+        <field name="name">Rent expired template</field>
+        <field name="model_id" ref="property.model_rent_management"/>
+        <field name="subject">"Rent order Expired"</field>
+        <field name="email_from">{{ (object.company_id.email) }}</field>
+        <field name="partner_to">{{ object.tenant_id.id }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>
+                    Hello,
+                    <t t-out="object.tenant_id.name"/>
+                    <br/>
+                    Your rent order
+                    <t t-out="object.sequence"/>
+                    is expired in
+                    <t t-out="object.payment_due_date"/>
+                </p>
+            </div>
+        </field>
+    </record>
+    <!--       action expired followups mail template-->
+    <record id="mail_template_rent_order_expired_follow_ups" model="mail.template">
+        <field name="name">Rent expired follow ups</field>
+        <field name="model_id" ref="property.model_rent_management"/>
+        <field name="subject">"Rent order followups"</field>
+        <field name="email_from">{{ (object.company_id.email) }}</field>
+        <field name="partner_to">{{ object.tenant_id.id }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>
+                    Hello,
+                    <t t-out="object.tenant_id.name or ''"/>
+                    <br/>
+                    Your rent order is expired in
+                    <t t-out="object.payment_due_date or ''"/>
+                    <br/>
+                    Payed amount :
+                    <t t-out="object.paid_amount or '0.0'"/>
+                    <br/>
+                    Total amount :
+                    <t t-out="object.final_amount or '0.0'"/>
+                    <br/>
+                    Due amount :
+                    <t t-out="object.due_amount or object.final_amount"/>
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>

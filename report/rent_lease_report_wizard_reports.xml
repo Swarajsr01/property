@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--    action report for rent report-->
+    <record id="action_rent_report" model="ir.actions.report">
+        <field name="name">Rent Report</field>
+        <field name="model">rent.lease.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="property.paperformat_a3_rent"/>
+        <field name="report_name">property.report_rent_report_details</field>
+        <field name="report_file">property.report_rent_report_details</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

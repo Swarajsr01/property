@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--    res partner form view-->
+    <record id="res_partner_view_form" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Rent">
+                    <field name="partner_rent_ids">
+                        <list readonly="1" default_order="create_date desc">
+                            <field name="sequence"/>
+                            <field name="tenant_id"/>
+                            <field name="type"/>
+                            <field name="final_amount"/>
+                            <field name="start_date" optional="hide"/>
+                            <field name="end_date" optional="hide"/>
+                            <field name="company_id" optional="hide"/>
+                            <field name="state" string="Rent State" widget="badge"/>
+                            <field name="payment_state" string="Payment State" widget="badge"/>
+                            <field name="currency_id" optional="hide"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

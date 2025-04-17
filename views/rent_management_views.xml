@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--  rent management action  -->
+    <record id="rent_management_action" model="ir.actions.act_window">
+        <field name="name">Rent Management</field>
+        <field name="res_model">rent.management</field>
+        <field name="view_mode">search,list,form</field>
+    </record>
+    <!--form view of rent management action-->
+    <record id="rent_management_view_form" model="ir.ui.view">
+        <field name="name">rent.management.view.form</field>
+        <field name="model">rent.management</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            invisible="state not in ('draft','approve')"
+                            groups="property.group_property_manager"/>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            invisible="state not in ('draft')"
+                            groups="property.group_property_user"/>
+                    <button name="action_returned" string="Return" type="object"
+                            invisible="state not in ('draft','confirmed')"
+                            groups="property.group_property_manager,property.group_property_user"/>
+                    <button name="action_closed" string="Close" type="object"
+                            invisible="state not in ('draft','confirmed','returned','approve')"
+                            groups="property.group_property_manager,property.group_property_user"/>
+                    <button name="action_expired" string="Expired" type="object"
+                            invisible="state not in ('draft','confirmed','returned','closed')"
+                            groups="property.group_property_manager"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('confirmed','closed','returned','expired','approve')"
+                            groups="property.group_property_manager,property.group_property_user"/>
+                    <button name="action_create_rent_invoice" type="object"
+                            string="Create Invoice" class="btn-primary"
+                            invisible="invoice_visibility"
+                            groups="property.group_property_manager"/>
+                    <button name="action_create_rent_invoice" type="object"
+                            string="Create Invoice" class="btn-primary"
+                            invisible="state not in ('confirmed')"
+                            groups="property.group_property_user"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,closed,returned,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" invisible="not start_date">
+                        <button class="oe_stat_button" type="object" name="action_rent_invoiced"
+                                icon="fa-pencil-square-o" invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div>
+                        <widget name="web_ribbon" title="Paid"
+                                invisible="payment_state != 'paid' or state not in ('confirmed','closed','returned',
+                                'expired')"/>
+                        <widget name="web_ribbon" bg_color="text-bg-danger" title="Not Paid"
+                                invisible="payment_state != 'not_paid' or state not in ('confirmed','closed','returned',
+                                'expired')"/>
+                        <widget name="web_ribbon" title="Partial"
+                                invisible="payment_state != 'partial' or state not in ('confirmed','closed','returned',
+                                'expired')"/>
+                    </div>
+                    <group>
+                        <h1>
+                            <field name="sequence" placeholder="Sequence" style="width:60%"/>
+                        </h1>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="type" style="width:80%"/>
+                            <field name="tenant_id" placeholder="Tenant" style="width:80%"/>
+                            <field name="company_id" placeholder="Company" style="width:80%"/>
+                            <field name="currency_id" style="width:80%" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" style="width:80%" string="Planned Date" widget="daterange"
+                                   options='{"end_date_field": "end_date", "always_range": "1"}'
+                                   required="start_date and end_date"/>
+                            <field name="payment_due_date" style="width:70%"/>
+                            <field name="total_days" style="width:100%" readonly="1" force_save="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Properties">
+                            <field name="order_line_ids" width="95%">
+                                <list editable="bottom">
+                                    <field name="property_name_id"/>
+                                    <field name="property_qty" readonly="1" force_save="1"/>
+                                    <field name="property_amount"/>
+                                    <field name="property_total_amount" readonly="1" force_save="1"/>
+                                    <field name="currency_id" readonly="1" force_save="1" optional="hide"/>
+                                    <control>
+                                        <create name="add_product_control" string="Add property"/>
+                                    </control>
+                                </list>
+                            </field>
+                            <h1 class="oe_avatar">
+                                <h2>
+                                    <span>Total amount</span>
+                                </h2>
+                                <field name="final_amount" readonly="1" force_save="1"/>
+                            </h1>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter class="oe_chatter">
+                    <field name="message_follower_ids" invisible="1" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+    <!--list view of rent management-->
+    <record id="rent_management_view_list" model="ir.ui.view">
+        <field name="name">rent.management.view.list</field>
+        <field name="model">rent.management</field>
+        <field name="arch" type="xml">
+            <list limit="20" default_order="create_date desc">
+                <field name="sequence"/>
+                <field name="tenant_id"/>
+                <field name="final_amount" force_save="1"/>
+                <field name="start_date" optional="hide"/>
+                <field name="end_date" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="state" optional="hide" widget="badge"/>
+                <field name="currency_id" optional="hide"/>
+                <control>
+                    <create name="add_product_control" string="Add product"/>
+                </control>
+            </list>
+        </field>
+    </record>
+    <!--  search view of rent management -->
+    <record id="rent_management_view_search" model="ir.ui.view">
+        <field name="name">rent.management.view.search</field>
+        <field name="model">rent.management</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tenant_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=','draft' )]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=','confirmed' )]"/>
+                <filter string="Returned" name="returned" domain="[('state', '=','returned' )]"/>
+                <filter string="Closed" name="closed" domain="[('state', '=','closed' )]"/>
+                <separator/>
+                <filter string="Rent" name="rent" domain="[('type', '=','rent' )]"/>
+                <filter string="Lease" name="lease" domain="[('type', '=','lease' )]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Tenant" name="tenant" context="{'group_by': 'tenant_id'}"/>
+                    <filter string="Type" name="type" context="{'group_by': 'type'}"/>
+                    <separator/>
+                    <filter string="End Date" name="end_date" context="{'group_by': 'end_date'}"/>
+                    <filter string="Start Date" name="start_date" context="{'group_by': 'start_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
