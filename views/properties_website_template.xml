@@ -57,6 +57,7 @@
         </t>
     </template>
 </odoo>
+        <!--                            <t t-foreach="records" t-as="properties_group">-->
         <!--                                <div class="row">-->
         <!--                                    <t t-foreach="properties_group" t-as="property">-->
         <!--                                        <div class="col-md-3">-->
