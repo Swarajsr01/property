@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 
 
-<odoo>
-    <template id="property_website_template" name="Purchase Orders List">
-        <t t-call="website.layout">
-            <div class="oe_structure">
-                <div class="container">
-                    <table class="table table-bordered table-striped">
-                        <tbody>
+<!--<odoo>-->
+<!--    <template id="property_website_template" name="Purchase Orders List">-->
+<!--        <t t-call="website.layout">-->
+<!--            <div class="oe_structure">-->
+<!--                <div class="container">-->
+<!--                    <table class="table table-bordered table-striped">-->
+<!--                        <tbody>-->
 <!--                            <t t-foreach="records" t-as="property">-->
 <!--                                <div class="row">-->
 <!--                                    <u>-->
@@ -77,12 +77,10 @@
 <!--                                    </div>-->
 <!--                                </div>-->
 <!--                            </t>-->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </t>
-    </template>
-</odoo>
-
-
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </template>-->
+<!--</odoo>-->

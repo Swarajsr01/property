@@ -30,7 +30,6 @@
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
         'views/properties_website_template.xml',
-        'views/property_website_template.xml',
         'views/property_menuitems.xml',
     ],
     'application': True,
@@ -40,5 +39,11 @@
         'web.assets_backend': [
             'property/static/src/js/action_manager.js',
         ],
-    }
+    },
+    'assets': {
+        'web.assets_frontend': [
+            'web/static/src/legacy/js/public/public_widget.js',
+            'property/static/src/js/inline_sum.js',
+        ],
+    },
 }
