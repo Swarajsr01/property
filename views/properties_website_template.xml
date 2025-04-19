@@ -7,21 +7,24 @@
             <div id="wrap" class="oe_structure oe_empty">
                 <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
                     <div class="container">
-                        <form action="/property" method="post">
+                        <form action="/property/rent/order" enctype="multipart/form-data"
+                              class="o_mark_required s_website_form"
+                              data-mark="*" data-model_name="" data-success-page="">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <div class="row mb- border" style="padding:25px 0px;margin:20px 10px">
                                 <div class="col-6">
                                     <div style="display: flex;gap: 15px;">
                                         <span>Tenant :</span>
                                         <input type="text" class="form-control s_website_form_input" name="name"
                                                placeholder="Name" style="width:70%; height:40px;"
-                                               t-att-value="request.env.user.name"/>
+                                               t-att-value="request.env.user.name" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 16px;">
                                         <span>E-mail :</span>
                                         <input type="email" class="form-control s_website_form_input" name="email"
                                                placeholder="Email" style="width:70%; height:40px;"
-                                               t-att-value="request.env.user.email"/>
+                                               t-att-value="request.env.user.email" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 15px;">
@@ -34,8 +37,8 @@
                                 <div class="col-6">
                                     <div style="display: flex;gap: 53px;">
                                         <span>Type :</span>
-                                        <select class="form-select form-control s_website_form_input" id="exampleSelect"
-                                                style="width:35%; height:40px;">
+                                        <select name="type" class="form-select form-control s_website_form_input"
+                                                id="example_select" style="width:35%; height:40px;">
                                             <option value="rent">Rent</option>
                                             <option value="lease">Lease</option>
                                         </select>
@@ -44,15 +47,16 @@
                                     <div style="display: flex;gap: 15px;">
                                         <span>From Date :</span>
                                         <input type="date" id="from_date" class="form-control s_website_form_input"
-                                               name="from_date" placeholder="From Date" style="width:35%; height:40px;"
-                                               t-att-value="datetime.datetime.today().date()"/>
+                                               name="from_date" placeholder="From Date"
+                                               style="width:35%; height:40px;"
+                                               t-att-value="datetime.datetime.today().date()" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 35px;">
                                         <span>To Date :</span>
                                         <input type="date" id="to_date" class="form-control s_website_form_input"
                                                name="to_date" placeholder="To Date" style="width:35%; height:40px;"
-                                               t-att-value="datetime.datetime.today().date()"/>
+                                               t-att-value="datetime.datetime.today().date()" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 18px;">
@@ -63,30 +67,41 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="line-section" class="border" style="padding:5px 5px 5px 5px;margin-top:0px;">
-                                <div id="order_line" style="display:flex;gap:5px">
-                                    <input type="text" name="property" class="form-control s_website_form_input"
-                                           placeholder="Property" style="height:40px;"/>
-                                    <!--                                no need the quantity field. i think-->
-                                    <input type="text" name="quantity" class="form-control s_website_form_input"
-                                           placeholder="Quantity" style="height:40px;"/>
+                            <div id="line-section" class="border" style="padding:0px 5px 5px 5px ;margin:0px;">
+                                <div id="order_line_1" style="display:flex;gap:5px;margin-top:5px">
+                                    <select type="text" name="property" id="property"
+                                            class="form-control s_website_form_input"
+                                            placeholder="Property" style="height:40px;" required="true">
+                                        <option value=""/>
+                                        <option t-foreach="request.env['property.management'].search([])"
+                                                t-as="property"
+                                                t-att-value="property.id">
+                                            <t t-esc="property.name"/>
+                                        </option>
+                                    </select>
                                     <input type="text" name="amount" class="form-control s_website_form_input"
-                                           placeholder="Amount" style="height:40px;"/>
+                                           placeholder="Amount" style="height:40px;" required="true"/>
                                     <input type="text" name="total_amount" class="form-control s_website_form_input"
-                                           placeholder="Total Amount" style="height:40px;"/>
+                                           placeholder="Total Amount" style="height:40px;" required="true"/>
+                                    <button id="remove_line" type="button" style="background:white;border:none">
+                                        <i class="fa fa-close"/>
+                                    </button>
                                 </div>
                             </div>
-
                             <div class="form-group col-12 s_website_form_submit text-end"
                                  data-name="Add Line" style="margin-top:5px;">
                                 <button id="add_btn" type="button" class="btn btn-danger">Add</button>
                             </div>
-
-
-
-                            <div class="form-group col-12 s_website_form_submit text-center" data-name="Submit Button"
-                                 style="padding-top:20px;">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="form-group col-12 s_website_form_submit mt-3" data-name="Submit Button">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <center>
+                                            <button type="submit"
+                                                    class="btn btn-primary o_website_form_send">Submit
+                                            </button>
+                                        </center>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -95,41 +110,6 @@
         </t>
     </template>
 </odoo>
-        <!--                            <t t-foreach="records" t-as="properties_group">-->
-        <!--                                <div class="row">-->
-        <!--                                    <t t-foreach="properties_group" t-as="property">-->
-        <!--                                        <div class="col-md-3">-->
-        <!--                                            <a t-attf-href="/property/{{ slug(property) }}"-->
-        <!--                                               style="text-decoration:none;">-->
-        <!--                                                <div class="card mb-4 mx-auto d-block" style="border:2px solid gray;">-->
-        <!--                                                    <div class="d-flex justify-content-center"-->
-        <!--                                                         style="width: 100%; height: 250px;">-->
-        <!--                                                        <img class="card-img-top"-->
-        <!--                                                             t-att-src="'data:image/jpeg;base64,'+-->
-        <!--                                                             property.image.decode('utf-8') if property.image-->
-        <!--                                                             else '/property/static/src/img/unavailable_image.jpg'"-->
-        <!--                                                             alt="Property Image"/>-->
-        <!--                                                    </div>-->
-        <!--                                                    <div class="card-body">-->
-        <!--                                                        <p>Property Name :-->
-        <!--                                                            <span t-esc="property.name"/>-->
-        <!--                                                        </p>-->
-        <!--                                                        <p>Property Owner :-->
-        <!--                                                            <span t-esc="property.owner_id.name"/>-->
-        <!--                                                        </p>-->
-        <!--                                                        <p>Build Date :-->
-        <!--                                                            <span t-esc="property.build_date.strftime('%d/%m/%Y')-->
-        <!--                                                            if property.build_date else 'unavailable'"/>-->
-        <!--                                                        </p>-->
-        <!--                                                    </div>-->
-        <!--                                                </div>-->
-        <!--                                            </a>-->
-        <!--                                        </div>-->
-        <!--                                    </t>-->
-        <!--                                </div>-->
-        <!--                            </t>-->
-        <!-- </t>-->
-        <!--    </template>-->
-        <!--</odoo>-->
+
 
 

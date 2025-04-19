@@ -2,34 +2,40 @@
 """webiste for property management"""
 
 from odoo import http
-from odoo.http import request
+from odoo.http import request, Controller, route
 import re
 
 
 class PropertyRentController(http.Controller):
-    @http.route(['/property'], type="http", auth="public", website=True)
-    def display_properties(self, **kwargs):
-        def group_list(lst, n):
-            return [lst[i:i + n] for i in range(0, len(lst), n)]
+    @route(['/property'], type="http", auth="user", website=True)
+    def form_of_rent_order(self, **kwargs):
+        """open the form of website rent"""
+        return request.render("property.properties_website_template")
 
-        properties = request.env['property.management'].sudo().search([])
-        grouped_properties = group_list(properties, 4)
-        values = {
-            'records': grouped_properties
-        }
-        return request.render("property.properties_website_template", values)
 
-    @http.route('/property/<string:slug>', auth='public', website=True)
-    def display_property(self, slug):
-        match = re.search(r'-(\d+)$', slug)
-        if not match:
-            return request.not_found()
-        property_id = int(match.group(1))
-        property = request.env['property.management'].sudo().search([('id', '=', property_id)])
-        values = {
-            'records': property
-        }
-        return request.render("property.property_website_template", values)
+
+    @route('/property/rent/order', type='http', auth='user', website=True, methods=['POST'])
+    def website_form_submit(self, **post):
+        print("1234567890987654")
+        print(post)
+        # request.env['custom.web.form.booking'].sudo().create({
+        #     'name': post.get('name'),
+        #     'phone': post.get('phone'),
+        #     'email': post.get('email'),
+        # })
+        # return request.redirect('/property/rent')
+
+
+
+
+
+
+    # addtional button .usig for checking
+
+    @route(['/property/rent'], type="http", auth='user', website=True)
+    def display_property_test(self, **post):
+        print("ertyui")
+        return request.render("property.web_form_template")
 
 
 
