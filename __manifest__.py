@@ -30,6 +30,7 @@
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
         'views/properties_website_template.xml',
+        'views/thank_you_page.xml',
         # 'views/web_form_template.xml',
         'views/property_menuitems.xml',
     ],
@@ -45,6 +46,7 @@
         'web.assets_frontend': [
             'web/static/src/legacy/js/public/public_widget.js',
             'property/static/src/js/website_rent.js',
+            'web.ajax',
         ],
     },
 }

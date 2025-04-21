@@ -1,0 +1,15 @@
+<odoo>
+    <template id="thank_you_page" name="Customer Form Successfully Submitted">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="alert alert-success">
+                            Customer created successfully.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
