@@ -23,7 +23,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="/property/rent/order" enctype="multipart/form-data"
+                        <form id="website_form" enctype="multipart/form-data"
                               class="o_mark_required s_website_form"
                               data-mark="*" data-model_name="" data-success-page="" method="post">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -31,22 +31,22 @@
                                 <div class="col-6">
                                     <div style="display: flex;gap: 15px;">
                                         <span>Tenant :</span>
-                                        <input type="text" class="form-control s_website_form_input" name="name"
-                                               placeholder="Name" style="width:70%; height:40px;"
+                                        <input type="text" id="name" class="form-control s_website_form_input"
+                                               name="name" placeholder="Name" style="width:70%; height:40px;"
                                                t-att-value="request.env.user.name" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 16px;">
                                         <span>E-mail :</span>
                                         <input type="email" class="form-control s_website_form_input" name="email"
-                                               placeholder="Email" style="width:70%; height:40px;"
+                                               id="email" placeholder="Email" style="width:70%; height:40px;"
                                                t-att-value="request.env.user.email" required="true"/>
                                     </div>
                                     <br/>
                                     <div style="display: flex;gap: 15px;">
                                         <span>Phone :</span>
                                         <input type="text" class="form-control s_website_form_input" name="phone"
-                                               placeholder="Phone" style="width:70%; height:40px;"
+                                               id="phone" placeholder="Phone" style="width:70%; height:40px;"
                                                t-att-value="request.env.user.phone"/>
                                     </div>
                                 </div>
@@ -79,19 +79,19 @@
                                         <span>Total Days :</span>
                                         <input type="text" class="form-control s_website_form_input"
                                                name="total_days" id="total_days" style="width:35%; height:40px;"
-                                               value="1" readonly="true"/>
+                                               value="1" readonly="true" required="true"/>
                                     </div>
                                 </div>
                             </div>
                             <div id="line-section" class="border" style="padding:0px 5px 5px 5px ;margin:0px;">
                                 <div id="order_line_1" style="display:flex;gap:5px;margin-top:5px">
-                                    <select type="text" name="property" id="property"
-                                            class="form-control s_website_form_input"
+                                    <select type="text" name="property[]"
+                                            class="property form-control s_website_form_input"
                                             placeholder="Property" style="height:40px;" required="true">
                                         <option value=""/>
                                         <option t-foreach="request.env['property.management'].search([])"
                                                 t-as="property"
-                                                t-att-value="property.id">
+                                                t-att-value="str(property.id)">
                                             <t t-esc="property.name"/>
                                         </option>
                                     </select>
@@ -114,8 +114,8 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <center>
-                                            <button type="submit"
-                                                    class="btn btn-primary o_website_form_send">Submit
+                                            <button type="button" id="submit_rent"
+                                                    class="btn btn-primary">Submit
                                             </button>
                                         </center>
                                     </div>

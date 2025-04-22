@@ -3,6 +3,8 @@
 
 from odoo import http, Command
 from odoo.http import request, route
+from odoo.addons.portal.controllers.portal import CustomerPortal
+# from odoo.addons.portal.controllers import portal
 
 
 class PropertyRentController(http.Controller):
@@ -11,17 +13,11 @@ class PropertyRentController(http.Controller):
         """open the form of website rent"""
         return request.render("property.properties_website_template")
 
-    @route('/property/rent/order', type='http', auth='user', website=True, methods=['POST'])
+    @route('/property/rent/order', type='json', auth='user', website=True)
     def website_form_submit(self, **post):
-        print("test")
         """create rent order based on form details"""
-        property_ids = []
-        properties = post.get('property')
-        print(properties)
-        if properties:
-            for property_id in properties:
-                if property_id != ',':
-                    property_ids.append(int(property_id))
+        property_ids = post.get('property_ids')
+        if property_ids:
             order_lines = []
             for property in property_ids:
                 property_id = request.env['property.management'].browse(property)
@@ -30,7 +26,7 @@ class PropertyRentController(http.Controller):
                 else:
                     amount = property_id.lease_amount
                 order_lines.append({
-                    'property_id': property_id.name,
+                    'property_id': property_id.id,
                     'quantity': post.get('total_days'),
                     'amount': amount,
                 })
@@ -52,7 +48,7 @@ class PropertyRentController(http.Controller):
             request.env['rent.management'].sudo().create(record)
         else:
             print("no property for create rent order")
-        return request.render("property.thank_you_page")
+        return {'redirect_url': '/property/thank_you'}
 
     @http.route('/get/property/amount', type='json', auth='user', website=True)
     def get_property_amount(self, **kwargs):
@@ -63,10 +59,15 @@ class PropertyRentController(http.Controller):
         else:
             return {'response_value': property_rec.lease_amount or 0.0}
 
+    @http.route('/property/thank_you', type='http', auth='public', website=True)
+    def thank_you(self, **kwargs):
+        return request.render('property.thank_you_page')
 
-
-    # addtional button .usig for checking
-    @route(['/property/rent'], type="http", auth='user', website=True)
-    def display_property_test(self, **post):
-        print("ertyui")
-        # return request.render("property.web_form_template")
+class RentalPortalAccount(CustomerPortal):
+    def _prepare_home_portal_values(self, counters):
+        values = super()._prepare_home_portal_values(counters)
+        if 'rental_lease_count' in counters:
+            rental_lease_count = request.env['rent.management'].sudo().search_count(
+                [('tenant_id', '=', request.env.user.partner_id.id)])
+            values['rental_lease_count'] = rental_lease_count
+        return values

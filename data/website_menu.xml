@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<odoo noupdate="1">
+<odoo>
     <record id="menu_property_property" model="website.menu">
         <field name="name">Property</field>
         <field name="url">/property</field>
         <field name="sequence" type="int">20</field>
-    </record>
-    <record id="menu_property_rent_lease" model="website.menu">
-        <field name="name">Rent</field>
-        <field name="url">/property/rent</field>
-        <field name="parent_id" ref="menu_property_property"/>
-        <field name="sequence" type="int">21</field>
     </record>
 </odoo>

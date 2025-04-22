@@ -1,8 +1,7 @@
 /** @odoo-module **/
 console.log("file running")
 import publicWidget from "@web/legacy/js/public/public_widget";
-//import { renderToElement } from "@web/core/utils/render";
-//import { useRef, useState } from "@odoo/owl";
+
 
 publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
     selector: '#wrap', events: {
@@ -10,16 +9,17 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
         'change #to_date': '_onChangeCalculate_total_days',
         'click #add_btn': '_onClickRow_line_add',
         'click #remove_line': '_onClickRow_line_remove',
-        'change #property': '_onChangeProperty_id',
+        'change .property': '_onChangeProperty_id',
         'change #type': '_onChangeType',
         'change #total_days': '_onChangeType',
+        'click #submit_rent': '_onClickSubmit_rent',
     },
      _onClickRow_line_add: function(ev){
                 var flag = 0;
                 const section = this.el.querySelector('#line-section');
                 const allDivs = section.querySelectorAll('div');
                 allDivs.forEach(div => {
-                    const select = div.querySelector('#property');
+                    const select = div.querySelector('.property');
 
                     if (select.value == "") {
                        flag = 1;
@@ -48,6 +48,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                     modal.style.display = "block";
                 }
      },
+
      _onClickRow_line_remove: function(ev){
                   const section = this.el.querySelector('#line-section');
                   const allDivs = section.querySelectorAll('div');
@@ -62,15 +63,75 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                        modal.style.display = "block";
                   }
      },
+
+     _onClickSubmit_rent: function(ev){
+                   var flag = 1;
+                   var msg = ""
+                   const form = this.el.querySelector('#website_form');
+                   const section = this.el.querySelector('#line-section');
+                   const propertiesDiv = Array.from(section.querySelectorAll('.property')).map(el => {
+                        return el.closest('div')?.id;
+                    });
+                   if (propertiesDiv.length == 1){
+                        const div = this.el.querySelector(`#${propertiesDiv[0]}`)
+                        if((div.querySelector('.property').value) == ""){
+                              flag = 0;
+                              msg = "At least one property want to create rent/lease order."
+                        }
+                   }
+                   if ((form.querySelector('#total_days').value) == ""){
+                        flag = 0;
+                        msg = "Select valid dates,without from and to date.We can't create rent order."
+                   }
+                   if (flag == 1){
+                        const propertiesArr = []
+                        for (const id of propertiesDiv){
+                            const property_id = this.el.querySelector(`#${id} .property`).value;
+                            var property = parseInt(property_id)
+                            if (!isNaN(property)) {
+                                 propertiesArr.push(property);
+                            }
+                        }
+                        fetch('/property/rent/order', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({ jsonrpc: "2.0",
+                                method: "call",
+                                params: { from_date: form.querySelector('#from_date').value,
+                                          to_date: form.querySelector('#to_date').value,
+                                          total_days: form.querySelector('#total_days').value,
+                                          type: form.querySelector('#type').value,
+                                          property_ids: propertiesArr,
+                                         }
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                              window.location.href = data.result.redirect_url;
+//                            current_parent_div.querySelector('#amount').value = data.result.response_value;
+//                            current_parent_div.querySelector('#total_amount').value =
+//                            data.result.response_value * parseInt(total_days);
+                        })
+                   }
+                   else{
+                        const modal = this.el.querySelector('#myModal');
+                        modal.querySelector('#message').innerText= msg
+                        modal.style.display = "block";
+                   }
+     },
+
      _onChangeType: function(ev){
                     const section = this.el.querySelector('#line-section');
-                    const parentDivIds = Array.from(section.querySelectorAll('#property')).map(el => {
+                    const parentDivIds = Array.from(section.querySelectorAll('.property')).map(el => {
                         return el.closest('div')?.id;
                     });
                     const type = this.el.querySelector('#type').value;
                     for (const id of parentDivIds) {
                         const current_parent_div =  this.el.querySelector(`#${id}`);
-                        const current_div_property =  current_parent_div.querySelector('#property').value;
+                        const current_div_property =  current_parent_div.querySelector('.property').value;
                         const total_days = this.el.querySelector('#total_days').value;
                         if(current_div_property != ""){
                             fetch('/get/property/amount', {
@@ -95,15 +156,16 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                         }
                     }
      },
+
      _onChangeProperty_id: function(ev){
                   const current_selection = ev.currentTarget;
                   const current_property_id =  current_selection.value;
                   const current_parent_div = current_selection.parentElement;
                   const section = this.el.querySelector('#line-section');
-                  const properties = Array.from(section.querySelectorAll('#property'));
+                  const properties = Array.from(section.querySelectorAll('.property'));
                   const values = properties.slice(0, -1).map(el => el.value);
                   if (values.includes(current_property_id)){
-//                      current_parent_div.querySelector('#property').value = "";
+                      current_parent_div.querySelector('.property').value = "";
                       current_parent_div.querySelector('#amount').value = "";
                       current_parent_div.querySelector('#total_amount').value = "";
                       const modal = this.el.querySelector('#myModal');
@@ -140,6 +202,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                       }
                   }
      },
+
     _onChangeCalculate_total_days: function(ev){
                 var from_date = this.$el.find('#from_date').val()
                 var to_date = this.$el.find('#to_date').val()
@@ -148,11 +211,10 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                     this.$el.find('#total_days').val(days+1).trigger('change');
                 }
                 else {
-                    this.$el.find('#total_days').val("");
+                    this.$el.find('#total_days').val("").trigger('change');
                     const modal = this.el.querySelector('#myModal');
                     modal.querySelector('#message').innerText = 'To date cannot be earlier than From date.'
                     modal.style.display = "block";
                 }
     },
 });
-

@@ -3,7 +3,7 @@
 {
     'name': "Property",
     'version': '1.0',
-    'depends': ['base', 'mail', 'contacts', 'account', 'hr'],
+    'depends': ['base', 'mail', 'contacts', 'account', 'hr','website'],
     'author': "STARLIN",
     'category': 'All',
     'description': """
@@ -31,6 +31,7 @@
         'views/res_partner_views.xml',
         'views/properties_website_template.xml',
         'views/thank_you_page.xml',
+        'views/portal_template.xml',
         # 'views/web_form_template.xml',
         'views/property_menuitems.xml',
     ],
