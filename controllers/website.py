@@ -71,3 +71,16 @@ class RentalPortalAccount(CustomerPortal):
                 [('tenant_id', '=', request.env.user.partner_id.id)])
             values['rental_lease_count'] = rental_lease_count
         return values
+
+    @http.route(['/my/rent_orders', '/my/rent_orders/page/<int:page>'], type='http', auth="user", website=True)
+    def portal_recruitment(self, search=None, search_in='All'):
+        """To search the recruitments data in the portal"""
+        # searchbar_inputs = {
+        #     'All': {'label': 'All', 'input': 'All', 'domain': []},
+        #     'Job Position': {'label': 'Job Position', 'input': 'Job Position', 'domain': [('job_id', 'like', search)]},
+        #     'Status': {'label': 'Status', 'input': 'Status', 'domain': [('stage_id', 'like', search)]},
+        # }
+        # search_domain = searchbar_inputs[search_in]['domain']
+        rent_orders = request.env['rent.management'].sudo().search([('tenant_id', '=', request.env.user.partner_id.id)],
+                                                                   order='id desc')
+        return request.render('property.portal_my_home_rent_views', {'rent_orders': rent_orders})

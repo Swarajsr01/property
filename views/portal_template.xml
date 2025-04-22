@@ -9,10 +9,45 @@
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/sale/static/src/img/bag.svg'"/>
                 <t t-set="title">Rental Orders</t>
-                <t t-set="url" t-value="'/my/rental-lease-orders'"/>
+                <t t-set="url" t-value="'/my/rent_orders'"/>
                 <t t-set="text">View Your Rental Orders</t>
                 <t t-set="placeholder_count" t-value="'rental_lease_count'"/>
             </t>
         </div>
+    </template>
+
+    <template id="portal_my_home_rent_views" name="My Time Off">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Recruitment</t>
+            </t>
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th class="text-left">Sequence</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-center">From date</th>
+                        <th class="text-end">To date</th>
+                    </tr>
+                </thead>
+                <t t-foreach="rent_orders" t-as="record">
+                    <tr>
+                        <td class='text-left'>
+                            <span t-field="record.sequence"/>
+                        </td>
+                        <td class='text-center'>
+                            <span t-field="record.type"/>
+                        </td>
+                        <td class='text-center'>
+                            <span t-field="record.start_date"/>
+                        </td>
+                        <td class='text-end'>
+                            <span t-field="record.end_date"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
     </template>
 </odoo>
