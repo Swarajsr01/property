@@ -18,13 +18,13 @@
         'data/mail_template_data.xml',
         'data/ir_cron_data.xml',
         'data/paper_format_demo.xml',
-        'data/website_menu.xml',
 
         'report/rent_lease_report_wizard_template.xml',
         'report/rent_lease_report_wizard_reports.xml',
 
         'wizard/rent_lease_report_wizard_views.xml',
 
+        'views/website_menu.xml',
         'views/property_management_views.xml',
         'views/rent_management_views.xml',
         'views/property_facilities_views.xml',
@@ -32,7 +32,6 @@
         'views/properties_website_template.xml',
         'views/thank_you_page.xml',
         'views/portal_template.xml',
-        # 'views/web_form_template.xml',
         'views/property_menuitems.xml',
     ],
     'application': True,
@@ -45,9 +44,7 @@
     },
     'assets': {
         'web.assets_frontend': [
-            'web/static/src/legacy/js/public/public_widget.js',
             'property/static/src/js/website_rent.js',
-            'web.ajax',
         ],
     },
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--    template for add a menu on portal template that shows portal user related rent orders-->
     <template id="portal_my_home_rental" name="Rental / Lease Order" customize_show="True"
               inherit_id="portal.portal_my_home" priority="20">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
@@ -8,46 +9,151 @@
         <div id="portal_client_category" position="inside">
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/sale/static/src/img/bag.svg'"/>
-                <t t-set="title">Rental Orders</t>
-                <t t-set="url" t-value="'/my/rent_orders'"/>
-                <t t-set="text">View Your Rental Orders</t>
-                <t t-set="placeholder_count" t-value="'rental_lease_count'"/>
+                <t t-set="title">Rent/Lease Orders</t>
+                <t t-set="url" t-value="'/my/home/rent_orders'"/>
+                <t t-set="text">View Your Rent/Lease Orders</t>
+                <t t-set="placeholder_count" t-value="'rent_lease_count'"/>
             </t>
         </div>
     </template>
-
-    <template id="portal_my_home_rent_views" name="My Time Off">
+    <!--    template for show portal user rent orders-->
+    <template id="portal_my_home_rent_list_views" name="Rent/Lease list view">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Recruitment</t>
+                <t t-set="title">Rent Orders</t>
             </t>
-            <t t-call="portal.portal_table">
+            <t t-if="rent_orders" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
                         <th class="text-left">Sequence</th>
-                        <th class="text-center">Type</th>
                         <th class="text-center">From date</th>
-                        <th class="text-end">To date</th>
+                        <th class="text-center">To date</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-end">Total</th>
                     </tr>
                 </thead>
                 <t t-foreach="rent_orders" t-as="record">
                     <tr>
                         <td class='text-left'>
-                            <span t-field="record.sequence"/>
-                        </td>
-                        <td class='text-center'>
-                            <span t-field="record.type"/>
+                            <a t-att-href="'/my/home/rent_orders/rent_orders-' + str(record.sequence)">
+                                <span t-field="record.sequence"/>
+                            </a>
                         </td>
                         <td class='text-center'>
                             <span t-field="record.start_date"/>
                         </td>
-                        <td class='text-end'>
+                        <td class='text-center'>
                             <span t-field="record.end_date"/>
+                        </td>
+                        <td class='text-center'>
+                            <span t-field="record.type"/>
+                        </td>
+                        <td class='text-end'>
+                            <span t-field="record.final_amount"/>
                         </td>
                     </tr>
                 </t>
             </t>
         </t>
+    </template>
+    <!--    template for show the current record details-->
+    <template id="portal_my_home_rent_views" name="Rent/Lease order view">
+        <t t-call="portal.portal_layout">
+            <section class="container">
+                <h2 class="text-center" style="margin-bottom:25px;">
+                    Rent Order-
+                    <t t-esc="rent_order.sequence"/>
+                </h2>
+                <div class="row mb- " style="padding:15px 25px;">
+                    <h5>Rent Information</h5>
+                    <hr/>
+                    <div class="col-6">
+                        <h6>Type :
+                            <t t-esc="type"/>
+                        </h6>
+                        <h6>Tenant :
+                            <t t-esc="rent_order.tenant_id.name"/>
+                        </h6>
+                        <h6>Company :
+                            <t t-esc="rent_order.company_id.name"/>
+                        </h6>
+                    </div>
+                    <div class="col-6">
+                        <h6>From date :
+                            <t t-esc="rent_order.start_date"/>
+                        </h6>
+                        <h6>To date :
+                            <t t-esc="rent_order.end_date"/>
+                        </h6>
+                        <h6>Total Days :
+                            <t t-esc="rent_order.total_days"/>
+                        </h6>
+                    </div>
+                </div>
+                <div>
+                    <h5>Order Lines :</h5>
+                    <div class="border" style="padding:5px 25px 25px 25px;">
+                        <t t-call="portal.portal_table">
+                            <thead>
+                                <tr class="active">
+                                    <th class="text-left">Properties</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Amount</th>
+                                    <th class="text-end">Total amount</th>
+                                </tr>
+                            </thead>
+                            <t t-foreach="rent_order.order_line_ids" t-as="record">
+                                <tr>
+                                    <td class='text-left'>
+                                        <span t-field="record.property_name_id.name"/>
+                                    </td>
+                                    <td class='text-center'>
+                                        <span t-field="record.property_qty"/>
+                                    </td>
+                                    <td class='text-center'>
+                                        <span t-field="record.property_amount"/>
+                                    </td>
+                                    <td class='text-end'>
+                                        <span t-field="record.property_total_amount"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                        <h5 class="text-end" style="margin-right:5px;margin-top:10px">
+                            Total amount :
+                            <span t-field="rent_order.final_amount"/>
+                        </h5>
+                    </div>
+                </div>
+            </section>
+        </t>
+    </template>
+    <!--    breadcrumbs for rent orders-->
+    <template id="portal_my_home_menu_rent_orders_list"
+              name="Portal layout : rent order menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'rent-orders'"
+                t-attf-class="breadcrumb-item #{'active ' if not rent_orders else ''}">
+                <span>Rent Orders</span>
+            </li>
+        </xpath>
+    </template>
+    <!--    breadcrumbs for rent order-->
+    <template id="portal_my_home_menu_rent_order"
+              name="Portal layout : rent order menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'rent-order'"
+                t-attf-class="breadcrumb-item #{'active ' if not rent_orders else ''}">
+                <a t-if="rent_order" t-attf-href="/my/home/rent_orders?{{ keep_query() }}">Rent Orders</a>
+                <t t-else="">Rent Orders</t>
+            </li>
+            <li t-if="rent_order" class="breadcrumb-item active">
+                Rent Order-
+                <t t-out="rent_order.sequence"/>
+            </li>
+        </xpath>
     </template>
 </odoo>

@@ -1,5 +1,4 @@
 /** @odoo-module **/
-console.log("file running")
 import publicWidget from "@web/legacy/js/public/public_widget";
 
 
@@ -17,20 +16,18 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
      _onClickRow_line_add: function(ev){
                 var flag = 0;
                 const section = this.el.querySelector('#line-section');
-                const allDivs = section.querySelectorAll('div');
-                allDivs.forEach(div => {
-                    const select = div.querySelector('.property');
-
-                    if (select.value == "") {
+                const all_divs = section.querySelectorAll('div');
+                all_divs.forEach(div => {
+                    const property = div.querySelector('.property');
+                    if (property.value == "") {
                        flag = 1;
                     }
                 });
                 if (flag == 0){
-                    const line = allDivs[allDivs.length - 1];
-                    const test = line.getAttribute('id');
-                    const clone = line.cloneNode(true);
+                    const last_div = all_divs[all_divs.length - 1];
+                    const clone = last_div.cloneNode(true);
                     clone.querySelectorAll("input").forEach(input => input.value = "");
-                    const idMatch = line.id.match(/(.*_)(\d+)/);
+                    const idMatch = last_div.id.match(/(.*_)(\d+)/);
                     let nextId = "";
                     if (idMatch) {
                         const base = idMatch[1];
@@ -38,29 +35,23 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                         nextId = base + num;
                     }
                     clone.setAttribute("id", nextId);
-                    const br = document.createElement("br");
                     section.appendChild(clone);
                 }
                 else{
-                    const modal = this.el.querySelector('#myModal');
-                    modal.querySelector('#message').innerText='You want to fill unfilled line first.'+
-                    'After that try to create new line'
-                    modal.style.display = "block";
+                    this._showModalMessage('You want to fill unfilled line first. After that try to create new line');
                 }
      },
 
      _onClickRow_line_remove: function(ev){
                   const section = this.el.querySelector('#line-section');
-                  const allDivs = section.querySelectorAll('div');
-                  if (allDivs.length > 1){
+                  const all_divs = section.querySelectorAll('div');
+                  if (all_divs.length > 1){
                       const current_button = ev.currentTarget;
-                      var parentDiv = current_button.parentElement;
-                      parentDiv.remove();
+                      var parent_div = current_button.parentElement;
+                      parent_div.remove();
                   }
                   else{
-                       const modal = this.el.querySelector('#myModal');
-                       modal.querySelector('#message').innerText='At least one property want to create rent/lease order'
-                       modal.style.display = "block";
+                       this._showModalMessage('At least one property want to create rent/lease order');
                   }
      },
 
@@ -69,12 +60,12 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                    var msg = ""
                    const form = this.el.querySelector('#website_form');
                    const section = this.el.querySelector('#line-section');
-                   const propertiesDiv = Array.from(section.querySelectorAll('.property')).map(el => {
+                   const properties_div = Array.from(section.querySelectorAll('.property')).map(el => {
                         return el.closest('div')?.id;
                     });
-                   if (propertiesDiv.length == 1){
-                        const div = this.el.querySelector(`#${propertiesDiv[0]}`)
-                        if((div.querySelector('.property').value) == ""){
+                   if (properties_div.length == 1){
+                        const existing_div = this.el.querySelector(`#${properties_div[0]}`)
+                        if((existing_div.querySelector('.property').value) == ""){
                               flag = 0;
                               msg = "At least one property want to create rent/lease order."
                         }
@@ -84,12 +75,12 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                         msg = "Select valid dates,without from and to date.We can't create rent order."
                    }
                    if (flag == 1){
-                        const propertiesArr = []
-                        for (const id of propertiesDiv){
-                            const property_id = this.el.querySelector(`#${id} .property`).value;
-                            var property = parseInt(property_id)
-                            if (!isNaN(property)) {
-                                 propertiesArr.push(property);
+                        const properties_array = []
+                        for (const id of properties_div){
+                            const property_value = this.el.querySelector(`#${id} .property`).value;
+                            var property_id = parseInt(property_value)
+                            if (!isNaN(property_id)) {
+                                 properties_array.push(property_id);
                             }
                         }
                         fetch('/property/rent/order', {
@@ -104,55 +95,37 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                                           to_date: form.querySelector('#to_date').value,
                                           total_days: form.querySelector('#total_days').value,
                                           type: form.querySelector('#type').value,
-                                          property_ids: propertiesArr,
+                                          property_ids: properties_array,
                                          }
                             }),
                         })
                         .then(response => response.json())
                         .then(data => {
-                              window.location.href = data.result.redirect_url;
-//                            current_parent_div.querySelector('#amount').value = data.result.response_value;
-//                            current_parent_div.querySelector('#total_amount').value =
-//                            data.result.response_value * parseInt(total_days);
+                              if (data.result.message) {
+                                    this._showModalMessage(data.result.message);
+                              }
+                              else if(data.result.redirect_url){
+                                    window.location.href = data.result.redirect_url;
+                              }
                         })
                    }
                    else{
-                        const modal = this.el.querySelector('#myModal');
-                        modal.querySelector('#message').innerText= msg
-                        modal.style.display = "block";
+                        this._showModalMessage(msg);
                    }
      },
 
      _onChangeType: function(ev){
                     const section = this.el.querySelector('#line-section');
-                    const parentDivIds = Array.from(section.querySelectorAll('.property')).map(el => {
+                    const parent_div_ids = Array.from(section.querySelectorAll('.property')).map(el => {
                         return el.closest('div')?.id;
                     });
                     const type = this.el.querySelector('#type').value;
-                    for (const id of parentDivIds) {
+                    for (const id of parent_div_ids) {
                         const current_parent_div =  this.el.querySelector(`#${id}`);
-                        const current_div_property =  current_parent_div.querySelector('.property').value;
+                        const property_id =  current_parent_div.querySelector('.property').value;
                         const total_days = this.el.querySelector('#total_days').value;
-                        if(current_div_property != ""){
-                            fetch('/get/property/amount', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: JSON.stringify({ jsonrpc: "2.0",
-                                    method: "call",
-                                    params: { property_id: current_div_property,
-                                              type: type,
-                                             }
-                                }),
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                current_parent_div.querySelector('#amount').value = data.result.response_value;
-                                current_parent_div.querySelector('#total_amount').value =
-                                data.result.response_value * parseInt(total_days);
-                            })
+                        if(property_id != ""){
+                              this._fetchPropertyAmount(current_parent_div, property_id, type, total_days)
                         }
                     }
      },
@@ -163,38 +136,18 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                   const current_parent_div = current_selection.parentElement;
                   const section = this.el.querySelector('#line-section');
                   const properties = Array.from(section.querySelectorAll('.property'));
-                  const values = properties.slice(0, -1).map(el => el.value);
+                  const values = properties.filter(el => el !== current_selection).map(el => el.value);
                   if (values.includes(current_property_id)){
                       current_parent_div.querySelector('.property').value = "";
                       current_parent_div.querySelector('#amount').value = "";
                       current_parent_div.querySelector('#total_amount').value = "";
-                      const modal = this.el.querySelector('#myModal');
-                      modal.querySelector('#message').innerText = 'property already exist'
-                      modal.style.display = "block";
+                      this._showModalMessage('property already exist');
                   }
                   else{
                       const total_days = this.el.querySelector('#total_days').value;
                       const type = this.el.querySelector('#type').value;
                       if(current_property_id != ""){
-                          fetch('/get/property/amount', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: JSON.stringify({ jsonrpc: "2.0",
-                                    method: "call",
-                                    params: { property_id: current_property_id,
-                                              type: type,
-                                             }
-                                }),
-                          })
-                          .then(response => response.json())
-                          .then(data => {
-                                current_parent_div.querySelector('#amount').value = data.result.response_value;
-                                current_parent_div.querySelector('#total_amount').value =
-                                data.result.response_value * parseInt(total_days);
-                          })
+                           this._fetchPropertyAmount(current_parent_div, current_property_id, type, total_days)
                       }
                       else{
                            current_parent_div.querySelector('#amount').value = "";
@@ -212,9 +165,42 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                 }
                 else {
                     this.$el.find('#total_days').val("").trigger('change');
-                    const modal = this.el.querySelector('#myModal');
-                    modal.querySelector('#message').innerText = 'To date cannot be earlier than From date.'
+                    this._showModalMessage('To date cannot be earlier than From date.')
+                }
+    },
+
+    _showModalMessage: function(messageText){
+                const modal = this.el.querySelector('#myModal');
+                if (modal){
+                    modal.querySelector('#message').innerText = messageText;
                     modal.style.display = "block";
                 }
     },
+
+    _fetchPropertyAmount: function(parent_div, property_id, type, total_days){
+                fetch('/get/property/amount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({ jsonrpc: "2.0",
+                        method: "call",
+                        params: { property_id: property_id,
+                                  type: type,
+                                 }
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    parent_div.querySelector('#amount').value = data.result.response_value;
+                    if(total_days){
+                        parent_div.querySelector('#total_amount').value =
+                        data.result.response_value * parseInt(total_days);
+                    }
+                    else{
+                        parent_div.querySelector('#total_amount').value = "";
+                    }
+                })
+    }
 });

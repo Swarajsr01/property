@@ -8,7 +8,6 @@
                 <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
                     <div class="container">
                         <div id="myModal" class="modal" style="display:none">
-                            <!-- Modal content -->
                             <div class="modal-content" style="width:55%;height:35%;position: fixed;top: 25%;left: 20%;
                                 padding:10px 20px">
                                 <div class="modal-header">
@@ -112,7 +111,7 @@
                             </div>
                             <div class="form-group col-12 s_website_form_submit mt-3" data-name="Submit Button">
                                 <div class="row">
-                                    <div class="col-sm">
+                                    <div class="col-sm" style="margin-bottom:20px;">
                                         <center>
                                             <button type="button" id="submit_rent"
                                                     class="btn btn-primary">Submit
