@@ -13,6 +13,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
         'change #total_days': '_onChangeType',
         'click #submit_rent': '_onClickSubmit_rent',
     },
+
      _onClickRow_line_add: function(ev){
                 var flag = 0;
                 const section = this.el.querySelector('#line-section');
@@ -30,9 +31,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                     const idMatch = last_div.id.match(/(.*_)(\d+)/);
                     let nextId = "";
                     if (idMatch) {
-                        const base = idMatch[1];
-                        const num = parseInt(idMatch[2]) + 1;
-                        nextId = base + num;
+                        nextId = idMatch[1] + (parseInt(idMatch[2]) + 1);
                     }
                     clone.setAttribute("id", nextId);
                     section.appendChild(clone);
@@ -49,6 +48,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                       const current_button = ev.currentTarget;
                       var parent_div = current_button.parentElement;
                       parent_div.remove();
+                      this._onChangeCalculate_grand_total_amount()
                   }
                   else{
                        this._showModalMessage('At least one property want to create rent/lease order');
@@ -114,7 +114,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                    }
      },
 
-     _onChangeType: function(ev){
+     _onChangeType: async function(ev){
                     const section = this.el.querySelector('#line-section');
                     const parent_div_ids = Array.from(section.querySelectorAll('.property')).map(el => {
                         return el.closest('div')?.id;
@@ -125,12 +125,13 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                         const property_id =  current_parent_div.querySelector('.property').value;
                         const total_days = this.el.querySelector('#total_days').value;
                         if(property_id != ""){
-                              this._fetchPropertyAmount(current_parent_div, property_id, type, total_days)
+                              await this._fetchPropertyAmount(current_parent_div, property_id, type, total_days)
+                              this._onChangeCalculate_grand_total_amount()
                         }
                     }
      },
 
-     _onChangeProperty_id: function(ev){
+     _onChangeProperty_id: async function(ev){
                   const current_selection = ev.currentTarget;
                   const current_property_id =  current_selection.value;
                   const current_parent_div = current_selection.parentElement;
@@ -138,20 +139,30 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                   const properties = Array.from(section.querySelectorAll('.property'));
                   const values = properties.filter(el => el !== current_selection).map(el => el.value);
                   if (values.includes(current_property_id)){
-                      current_parent_div.querySelector('.property').value = "";
-                      current_parent_div.querySelector('#amount').value = "";
-                      current_parent_div.querySelector('#total_amount').value = "";
-                      this._showModalMessage('property already exist');
+                      if(current_property_id != ""){
+                          current_parent_div.querySelector('.property').value = "";
+                          current_parent_div.querySelector('#amount').value = "";
+                          current_parent_div.querySelector('#total_amount').value = "";
+                          this._onChangeCalculate_grand_total_amount()
+                          this._showModalMessage('Property already exist');
+                      }
+                      else{
+                          current_parent_div.remove();
+                          this._showModalMessage('Not possible to clear a property selection field, when a empty'+
+                          ' property selected field available');
+                      }
                   }
                   else{
                       const total_days = this.el.querySelector('#total_days').value;
                       const type = this.el.querySelector('#type').value;
                       if(current_property_id != ""){
-                           this._fetchPropertyAmount(current_parent_div, current_property_id, type, total_days)
+                           await this._fetchPropertyAmount(current_parent_div, current_property_id, type, total_days)
+                           this._onChangeCalculate_grand_total_amount()
                       }
                       else{
                            current_parent_div.querySelector('#amount').value = "";
                            current_parent_div.querySelector('#total_amount').value = "";
+                           this._onChangeCalculate_grand_total_amount()
                       }
                   }
      },
@@ -162,11 +173,24 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                 var days = (new Date(to_date) - new Date(from_date))/(1000 * 60 * 60 * 24);
                 if (days >= 0) {
                     this.$el.find('#total_days').val(days+1).trigger('change');
+                    this._onChangeCalculate_grand_total_amount()
                 }
                 else {
                     this.$el.find('#total_days').val("").trigger('change');
                     this._showModalMessage('To date cannot be earlier than From date.')
                 }
+    },
+
+    _onChangeCalculate_grand_total_amount: function(ev){
+                  const total_amount_arr = Array.from(
+                  this.el.querySelectorAll('#total_amount')).map(el => el.value.replace('$', '')).map(Number)
+                  const grand_total_amount = '$' + ((total_amount_arr.reduce((a, b) => a + b, 0)).toFixed(2))
+                  if(grand_total_amount == '$NaN'){
+                       this.el.querySelector('#grand_total_amount').innerText = "$0.00";
+                  }
+                  else{
+                       this.el.querySelector('#grand_total_amount').innerText = grand_total_amount;
+                  }
     },
 
     _showModalMessage: function(messageText){
@@ -177,8 +201,8 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                 }
     },
 
-    _fetchPropertyAmount: function(parent_div, property_id, type, total_days){
-                fetch('/get/property/amount', {
+    _fetchPropertyAmount: async function(parent_div, property_id, type, total_days){
+                const response = await fetch('/get/property/amount', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -191,16 +215,14 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                                  }
                     }),
                 })
-                .then(response => response.json())
-                .then(data => {
-                    parent_div.querySelector('#amount').value = data.result.response_value;
-                    if(total_days){
-                        parent_div.querySelector('#total_amount').value =
-                        data.result.response_value * parseInt(total_days);
-                    }
-                    else{
-                        parent_div.querySelector('#total_amount').value = "";
-                    }
-                })
+                const data = await response.json();
+                parent_div.querySelector('#amount').value = '$' + (data.result.response_value).toFixed(2);
+                if(total_days){
+                    parent_div.querySelector('#total_amount').value = '$'+
+                    (data.result.response_value * parseInt(total_days)).toFixed(2);
+                }
+                else{
+                    parent_div.querySelector('#total_amount').value = "$0.00";
+                }
     }
 });

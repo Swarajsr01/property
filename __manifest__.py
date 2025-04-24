@@ -29,9 +29,11 @@
         'views/rent_management_views.xml',
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
-        'views/properties_website_template.xml',
+        'views/rent_website_template.xml',
         'views/thank_you_page.xml',
         'views/portal_template.xml',
+        'views/category_template.xml',
+        'views/property_view_template.xml',
         'views/property_menuitems.xml',
     ],
     'application': True,
@@ -45,6 +47,16 @@
     'assets': {
         'web.assets_frontend': [
             'property/static/src/js/website_rent.js',
+            'property/static/src/xml/category_highlight_content.xml',
+            'property/static/src/js/properties_category.js',
         ],
     },
 }
+
+
+# 'assets': {
+#         'web.assets_frontend': [
+#             '/dynamic_snippet/static/src/xml/category_highlight_content.xml',
+# '/dynamic_snippet/static/src/js/product_category.js',
+#         ],
+#     },

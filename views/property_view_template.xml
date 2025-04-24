@@ -1,0 +1,45 @@
+<odoo>
+    <!--    template show when the user create rent order-->
+    <template id="property_view_template" name="Customer Form Successfully Submitted">
+        <t t-call="website.layout">
+            <div class="container">
+                <h3 class="text-center" style="margin-bottom:25px;margin-top:25px;">
+                    <u>
+                        <t t-esc="property.name"/>
+                    </u>
+                </h3>
+                <div class="row mb- " style="padding:15px 25px;">
+                    <h5>Property Details</h5>
+                    <hr/>
+                    <div class="col-6">
+                        <h6>Owner :
+                            <t t-esc="property.owner_id.name"/>
+                        </h6>
+                        <h6>Address :
+<!--                            <t t-esc="property.owner_id"/>-->
+                        </h6>
+                        <h6>Company :
+                            <t t-esc="property.company_id.name"/>
+                        </h6>
+                    </div>
+                    <div class="col-6">
+                        <h6>Build Date :
+                            <t t-esc="property.build_date"/>
+                        </h6>
+                        <h6>Rent Amount :
+                            $<t t-esc="property.rent_amount"/>
+                        </h6>
+                        <h6>Lease Amount :
+                            $<t t-esc="property.lease_amount"/>
+                        </h6>
+                        <h6>Facilities :
+<!--                            <t t-esc="property.lease_amount"/>-->
+                        </h6>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

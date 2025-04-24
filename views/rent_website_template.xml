@@ -2,7 +2,7 @@
 
 
 <odoo>
-    <template id="properties_website_template" name="Properties List">
+    <template id="rent_website_template" name="Properties List">
         <t t-call="website.layout">
             <div id="wrap" class="oe_structure oe_empty">
                 <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
@@ -109,6 +109,10 @@
                                  data-name="Add Line" style="margin-top:5px;">
                                 <button id="add_btn" type="button" class="btn btn-danger">Add</button>
                             </div>
+                            <h5 class="text-end" style="margin-top:15px;">Total Amount:
+                                <span id="grand_total_amount" style="width:40px">$0.00
+                                </span>
+                            </h5>
                             <div class="form-group col-12 s_website_form_submit mt-3" data-name="Submit Button">
                                 <div class="row">
                                     <div class="col-sm" style="margin-bottom:20px;">

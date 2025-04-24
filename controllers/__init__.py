@@ -3,3 +3,4 @@
 
 from . import main
 from . import website
+from . import properties_category_snippet
