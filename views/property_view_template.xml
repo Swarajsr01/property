@@ -1,6 +1,6 @@
 <odoo>
-    <!--    template show when the user create rent order-->
-    <template id="property_view_template" name="Customer Form Successfully Submitted">
+    <!--    snippet property view-->
+    <template id="property_view_template" name="Snippet Properties">
         <t t-call="website.layout">
             <div class="container">
                 <h3 class="text-center" style="margin-bottom:25px;margin-top:25px;">
@@ -8,32 +8,62 @@
                         <t t-esc="property.name"/>
                     </u>
                 </h3>
+                <h5 class="fs-4">Property Details</h5>
+                <hr/>
                 <div class="row mb- " style="padding:15px 25px;">
-                    <h5>Property Details</h5>
-                    <hr/>
                     <div class="col-6">
-                        <h6>Owner :
+                        <div class="text-center">1
+                            <img class="card-img-top oe_avatar border rounded-3"
+                                 t-attf-src="data:image/png;base64,{{property.image}}"
+                                 style="padding: 1px 1px; margin: 0px; height: 250px; width:70%;"/>
+                        </div>
+                    </div>
+                    <div class="col-6" style="margin-top:20px;">
+                        <h6 class="fs-5">Owner :
                             <t t-esc="property.owner_id.name"/>
                         </h6>
-                        <h6>Address :
-<!--                            <t t-esc="property.owner_id"/>-->
+                        <h6 class="fs-6">Address :
+                            <t t-if="property.street" t-esc="property.street"/>
+                            <span t-if="(property.street) and (property.street2 or property.city or property.state_id
+                            or property.zip or property.country_id)">,
+                            </span>
+                            <t t-if="property.street2" t-esc="property.street2"/>
+                            <span t-if="(property.street2) and (property.city or property.state_id
+                            or property.zip or property.country_id)">,
+                            </span>
+                            <t t-if="property.city" t-esc="property.city"/>
+                            <span t-if="(property.city) and (property.state_id
+                            or property.zip or property.country_id)">,
+                            </span>
+                            <t t-if="property.state_id" t-esc="property.state_id.name"/>
+                            <span t-if="(property.state_id) and (property.zip or property.country_id)">,</span>
+                            <t t-if="property.zip" t-esc="property.zip"/>
+                            <span t-if="(property.zip) and (property.country_id)">,</span>
+                            <t t-if="property.country_id" t-esc="property.country_id.name"/>
+                            <span t-if="not property.street and not property.street2 and not property.city
+                            and not property.state_id and not property.zip and not property.country_id">Unavailable
+                            </span>
                         </h6>
-                        <h6>Company :
+                        <h6 class="fs-6">Company :
                             <t t-esc="property.company_id.name"/>
                         </h6>
-                    </div>
-                    <div class="col-6">
-                        <h6>Build Date :
+                        <h6 class="fs-6">Build Date :
                             <t t-esc="property.build_date"/>
                         </h6>
-                        <h6>Rent Amount :
-                            $<t t-esc="property.rent_amount"/>
+                        <h6 class="fs-6">Rent Amount :
+                            $
+                            <t t-esc="property.rent_amount"/>
                         </h6>
-                        <h6>Lease Amount :
-                            $<t t-esc="property.lease_amount"/>
+                        <h6 class="fs-6">Lease Amount :
+                            $
+                            <t t-esc="property.lease_amount"/>
                         </h6>
-                        <h6>Facilities :
-<!--                            <t t-esc="property.lease_amount"/>-->
+                        <h6 class="fs-6">Facilities :
+                            <t t-if="property.facility_ids" t-foreach="property.facility_ids" t-as="facility">
+                                <t t-esc="facility.facility_name"/><span t-if="facility.facility_name">,</span>
+                            </t>
+                            <span t-if="not property.facility_ids">No facility available</span>
+
                         </h6>
                     </div>
                 </div>

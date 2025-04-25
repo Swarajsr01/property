@@ -47,7 +47,7 @@
     'assets': {
         'web.assets_frontend': [
             'property/static/src/js/website_rent.js',
-            'property/static/src/xml/category_highlight_content.xml',
+            'property/static/src/xml/property_highlight_content.xml',
             'property/static/src/js/properties_category.js',
         ],
     },
