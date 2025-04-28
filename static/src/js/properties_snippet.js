@@ -9,16 +9,19 @@ function chunkArray(array, size) {
     }
     return chunks;
 }
-
-publicWidget.registry.get_product_tab = publicWidget.Widget.extend({
-    selector : '.categories_section',
+publicWidget.registry.get_properties = publicWidget.Widget.extend({
+    selector : '.properties_section',
     async willStart() {
         const result = await rpc('/get_properties_categories', {});
         if(result && result.properties){
-//            let fragment = renderToFragment('property.category_data', { result: result });
               const chunks = chunkArray(result.properties, 4);
-//            this.$target.empty().append(fragment);
-              this.$target.empty().html(renderToElement('property.category_data', {chunks: chunks}))
+              chunks[0].is_active = true
+              this.$target.empty().html(renderToElement('property.property_snippet_template', {chunks: chunks,
+                                                                                   symbol:result.currency_symbol
+                                                                                   }))
         }
     },
 });
+
+
+

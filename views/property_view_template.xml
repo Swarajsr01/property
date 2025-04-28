@@ -3,16 +3,24 @@
     <template id="property_view_template" name="Snippet Properties">
         <t t-call="website.layout">
             <div class="container">
+                <a t-attf-href="/">
+                    <i class="fa fa-arrow-left" aria-hidden="true" style="margin-top:5px"/>
+                </a>
                 <h3 class="text-center" style="margin-bottom:25px;margin-top:25px;">
                     <u>
                         <t t-esc="property.name"/>
                     </u>
                 </h3>
-                <h5 class="fs-4">Property Details</h5>
+                <div style="display:flex;justify-content:space-between;">
+                    <h5 class="fs-4">Property Details</h5>
+                    <h5 class="fs-5">State :
+                        <span t-esc="state" t-attf-class="badge bg-info"/>
+                    </h5>
+                </div>
                 <hr/>
                 <div class="row mb- " style="padding:15px 25px;">
                     <div class="col-6">
-                        <div class="text-center">1
+                        <div class="text-center">
                             <img class="card-img-top oe_avatar border rounded-3"
                                  t-attf-src="data:image/png;base64,{{property.image}}"
                                  style="padding: 1px 1px; margin: 0px; height: 250px; width:70%;"/>
@@ -44,26 +52,32 @@
                             and not property.state_id and not property.zip and not property.country_id">Unavailable
                             </span>
                         </h6>
-                        <h6 class="fs-6">Company :
-                            <t t-esc="property.company_id.name"/>
-                        </h6>
                         <h6 class="fs-6">Build Date :
                             <t t-esc="property.build_date"/>
                         </h6>
                         <h6 class="fs-6">Rent Amount :
-                            $
+                            <t t-esc="request.env.company.currency_id.symbol"/>&#160;
                             <t t-esc="property.rent_amount"/>
                         </h6>
                         <h6 class="fs-6">Lease Amount :
-                            $
+                            <t t-esc="request.env.company.currency_id.symbol"/>&#160;
                             <t t-esc="property.lease_amount"/>
                         </h6>
+                        <h6 class="fs-6">Company :
+                            <t t-esc="property.company_id.name"/>
+                        </h6>
+                        <t t-set="colors" t-value="['primary', 'success', 'info', 'warning', 'danger', 'secondary']"/>
                         <h6 class="fs-6">Facilities :
-                            <t t-if="property.facility_ids" t-foreach="property.facility_ids" t-as="facility">
-                                <t t-esc="facility.facility_name"/><span t-if="facility.facility_name">,</span>
+                            <t t-if="property.facility_ids" t-foreach="enumerate(property.facility_ids)" t-as="facility_item">
+                                <t t-set="facility" t-value="facility_item[1]"/>
+                                <t t-set="i" t-value="facility_item[0]"/>
+                                <t t-set="color" t-value="colors[i % len(colors)]"/>
+                                <span t-if="facility.facility_name"
+                                      t-attf-class="badge bg-#{color} me-1">
+                                    <t t-esc="facility.facility_name"/>
+                                </span>
                             </t>
                             <span t-if="not property.facility_ids">No facility available</span>
-
                         </h6>
                     </div>
                 </div>

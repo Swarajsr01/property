@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""website for property management"""
+"""website controller for property management"""
 
 from odoo import http, Command
 from odoo.http import request, route
@@ -37,14 +37,14 @@ class PropertyRentController(http.Controller):
                             'message': 'You already submitted this rent order with the same properties and date range.'
                         }
             order_lines = []
-            for property in property_ids:
-                property_id = request.env['property.management'].browse(property)
+            for property_id in property_ids:
+                property_obj = request.env['property.management'].browse(property_id)
                 if post.get('type') == 'rent':
-                    amount = property_id.rent_amount
+                    amount = property_obj.rent_amount
                 else:
-                    amount = property_id.lease_amount
+                    amount = property_obj.lease_amount
                 order_lines.append({
-                    'property_id': property_id.id,
+                    'property_id': property_obj.id,
                     'quantity': total_days,
                     'amount': amount,
                 })
@@ -77,7 +77,7 @@ class PropertyRentController(http.Controller):
 
     @route('/property/thank_you', type='http', auth='user', website=True)
     def thank_you(self):
-        """when the user create a rent order .then redirect to the thank you page"""
+        """when the user create a rent order .then redirect to the thank-you page"""
         return request.render('property.thank_you_page')
 
 
@@ -86,7 +86,7 @@ class RentalPortalAccount(CustomerPortal):
 
     def _prepare_home_portal_values(self, counters):
         """add count to the template to show the menu in portal"""
-        values = super()._prepare_home_portal_values(counters)
+        values = super(RentalPortalAccount, self)._prepare_home_portal_values(counters)
         if 'rent_lease_count' in counters:
             rental_lease_count = request.env['rent.management'].sudo().search_count(
                 [('tenant_id', '=', request.env.user.partner_id.id)])

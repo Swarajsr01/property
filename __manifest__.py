@@ -43,20 +43,10 @@
         'web.assets_backend': [
             'property/static/src/js/action_manager.js',
         ],
-    },
-    'assets': {
         'web.assets_frontend': [
-            'property/static/src/js/website_rent.js',
+            'property/static/src/js/website_rent_order.js',
             'property/static/src/xml/property_highlight_content.xml',
-            'property/static/src/js/properties_category.js',
+            'property/static/src/js/properties_snippet.js',
         ],
     },
 }
-
-
-# 'assets': {
-#         'web.assets_frontend': [
-#             '/dynamic_snippet/static/src/xml/category_highlight_content.xml',
-# '/dynamic_snippet/static/src/js/product_category.js',
-#         ],
-#     },

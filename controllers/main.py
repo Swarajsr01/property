@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controller"""
+"""Controller for report"""
 
 import json
 from odoo import http
