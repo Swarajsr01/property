@@ -3,9 +3,9 @@
     <template id="property_view_template" name="Snippet Properties">
         <t t-call="website.layout">
             <div class="container">
-                <a t-attf-href="/">
-                    <i class="fa fa-arrow-left" aria-hidden="true" style="margin-top:5px"/>
-                </a>
+                <button type="button" class="btn btn-light" style="margin-top:5px" onclick="window.history.back();">
+                    <i class="fa fa-arrow-left" aria-hidden="true"/>
+                </button>
                 <h3 class="text-center" style="margin-bottom:25px;margin-top:25px;">
                     <u>
                         <t t-esc="property.name"/>
@@ -68,7 +68,8 @@
                         </h6>
                         <t t-set="colors" t-value="['primary', 'success', 'info', 'warning', 'danger', 'secondary']"/>
                         <h6 class="fs-6">Facilities :
-                            <t t-if="property.facility_ids" t-foreach="enumerate(property.facility_ids)" t-as="facility_item">
+                            <t t-if="property.facility_ids" t-foreach="enumerate(property.facility_ids)"
+                               t-as="facility_item">
                                 <t t-set="facility" t-value="facility_item[1]"/>
                                 <t t-set="i" t-value="facility_item[0]"/>
                                 <t t-set="color" t-value="colors[i % len(colors)]"/>

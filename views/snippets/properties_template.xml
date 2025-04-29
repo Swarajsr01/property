@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="category_template_highlight" name="Properties">
+    <template id="properties_template_highlight" name="Properties">
         <section class="properties_section">
             <div class="container">
                 <div class="alert alert-info">
@@ -11,10 +11,10 @@
             </div>
         </section>
     </template>
-    <template id="category_highlight_snippet" inherit_id="website.snippets"
+    <template id="properties_highlight_snippet" inherit_id="website.snippets"
               name="Properties Snippet">
         <xpath expr="//snippets[@id='snippet_groups']" position="inside">
-            <t t-snippet="property.category_template_highlight"/>
+            <t t-snippet="property.properties_template_highlight"/>
         </xpath>
     </template>
 </odoo>

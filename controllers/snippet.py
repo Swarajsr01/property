@@ -31,7 +31,7 @@ class WebsiteProduct(http.Controller):
     @route('/property/<property_id>', type='http', auth="public", website=True)
     def current_property_details(self, property_id):
         """get property details and return to the template to view the property details"""
-        property_obj = request.env['property.management'].sudo().search([('id', '=', property_id)])
+        property_obj = request.env['property.management'].sudo().browse(int(property_id))
         property_state = dict(property_obj.fields_get()['state']['selection']).get(property_obj.state)
         return request.render('property.property_view_template', {'property': property_obj,
                                                                   'state': property_state})

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="property.property_snippet_template">
+    <t t-name="property.properties_snippet_template">
         <section class="properties_section">
             <div class="container mt-3">
                 <h3 class="text-center section_heading fst-italic text-primary" style="margin-bottom:35px;">
                     <u>Properties</u>
                 </h3>
-                <div id="property_carousel" class="container carousel slide" data-bs-ride="carousel"
+                <div t-attf-id="property_carousel{{uniq}}" class="container carousel slide" data-bs-ride="carousel"
                      t-att-data-bs-interval="interval">
                     <div class="carousel-inner row w-100 mx-auto" role="listbox">
                         <t t-foreach="chunks" t-as="chunk" t-key="chunk.id">
@@ -46,12 +46,12 @@
                                     </t>
                                 </div>
                             </div>
-                            <a t-attf-href="#property_carousel"
+                            <a t-attf-href="#property_carousel{{uniq}}"
                                class="carousel-control-prev" data-bs-slide="prev"
                                role="button" aria-label="Previous" title="Previous">
                                 <span class="fa fa-solid fa-arrow-left fa-2x" style="color:#080808"/>
                             </a>
-                            <a t-attf-href="#property_carousel"
+                            <a t-attf-href="#property_carousel{{uniq}}"
                                class="carousel-control-next" data-bs-slide="next"
                                role="button" aria-label="Next" title="Next">
                                 <span class="fa fa-solid fa-arrow-right fa-2x" style="color:#080808"/>

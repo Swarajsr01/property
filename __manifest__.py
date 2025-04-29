@@ -32,7 +32,7 @@
         'views/rent_website_template.xml',
         'views/thank_you_page.xml',
         'views/portal_template.xml',
-        'views/category_template.xml',
+        'views/snippets/properties_template.xml',
         'views/property_view_template.xml',
         'views/property_menuitems.xml',
     ],
@@ -45,7 +45,7 @@
         ],
         'web.assets_frontend': [
             'property/static/src/js/website_rent_order.js',
-            'property/static/src/xml/property_highlight_content.xml',
+            'property/static/src/xml/properties_snippet_template.xml',
             'property/static/src/js/properties_snippet.js',
         ],
     },

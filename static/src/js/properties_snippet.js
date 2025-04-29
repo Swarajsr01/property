@@ -16,8 +16,10 @@ publicWidget.registry.get_properties = publicWidget.Widget.extend({
         if(result && result.properties){
               const chunks = chunkArray(result.properties, 4);
               chunks[0].is_active = true
-              this.$target.empty().html(renderToElement('property.property_snippet_template', {chunks: chunks,
-                                                                                   symbol:result.currency_symbol
+              const uniq = Date.now()
+              this.$target.empty().html(renderToElement('property.properties_snippet_template', {chunks: chunks,
+                                                                                   symbol:result.currency_symbol,
+                                                                                   uniq : uniq,
                                                                                    }))
         }
     },

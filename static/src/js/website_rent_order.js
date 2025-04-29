@@ -3,7 +3,8 @@ import publicWidget from "@web/legacy/js/public/public_widget";
 
 
 publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
-    selector: '#wrap', events: {
+    selector: '#wrap',
+    events: {
         'change #from_date': '_onChangeCalculate_total_days',
         'change #to_date': '_onChangeCalculate_total_days',
         'click #add_btn': '_onClickRow_line_add',
@@ -51,7 +52,7 @@ publicWidget.registry.generic_form_data = publicWidget.Widget.extend({
                       this._onChangeCalculate_grand_total_amount()
                   }
                   else{
-                       this._showModalMessage('At least one property want to create rent/lease order');
+                       this._showModalMessage('At least one property wanted to create rent/lease order');
                   }
      },
 

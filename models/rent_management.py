@@ -91,8 +91,11 @@ class RentManagement(models.Model):
     @api.onchange('start_date', 'end_date')
     def _onchange_start_date(self):
         """Calculate total days"""
-        if self.start_date and self.end_date:
-            self.total_days = int((self.end_date - self.start_date).days)
+        if (self.start_date and self.end_date) and (self.start_date <= self.end_date):
+            print("printing")
+            self.total_days = int((self.end_date - self.start_date).days) + 1
+        else:
+            raise ValidationError("To date cannot be earlier than From date.")
 
     @api.onchange('type')
     def _onchange_type(self):

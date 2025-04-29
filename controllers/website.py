@@ -16,14 +16,14 @@ class PropertyRentController(http.Controller):
     def website_form_submit(self, **post):
         """create rent order based on form details"""
         property_ids = post.get('property_ids')
-        type = post.get('type')
+        property_type = post.get('type')
         from_date = post.get('from_date')
         to_date = post.get('to_date')
         total_days = post.get('total_days')
         if property_ids:
             existing_orders = request.env['rent.management'].sudo().search([
                 ('tenant_id', '=', request.env.user.partner_id.id),
-                ('type', '=', type),
+                ('type', '=', property_type),
                 ('start_date', '=', from_date),
                 ('end_date', '=', to_date),
                 ('total_days', '=', total_days),
@@ -36,28 +36,22 @@ class PropertyRentController(http.Controller):
                         return {
                             'message': 'You already submitted this rent order with the same properties and date range.'
                         }
-            order_lines = []
+            order_line_ids = []
             for property_id in property_ids:
                 property_obj = request.env['property.management'].browse(property_id)
                 if post.get('type') == 'rent':
                     amount = property_obj.rent_amount
                 else:
                     amount = property_obj.lease_amount
-                order_lines.append({
-                    'property_id': property_obj.id,
-                    'quantity': total_days,
-                    'amount': amount,
-                })
-            order_line_ids = [
-                Command.create({
-                    "property_name_id": line["property_id"], "property_qty": line["quantity"],
-                    "property_amount": line["amount"],
-                    "property_total_amount": float(line["quantity"]) * line["amount"]})
-                for line in order_lines
-            ]
+                order_line_ids.append(Command.create({
+                    'property_name_id': property_obj.id,
+                    'property_qty': total_days,
+                    'property_amount': amount,
+                    'property_total_amount': float(total_days) * amount,
+                }))
             request.env['rent.management'].sudo().create({
                 'tenant_id': request.env.user.partner_id.id,
-                'type': type,
+                'type': property_type,
                 'start_date': from_date,
                 'end_date': to_date,
                 'payment_due_date': to_date,
@@ -105,7 +99,7 @@ class RentalPortalAccount(CustomerPortal):
     def rent_order_by_sequence(self, sequence):
         """give selected sequence record to template"""
         rent_order = request.env['rent.management'].sudo().search([('sequence', '=', sequence)])
-        type = dict(rent_order.fields_get()['type']['selection']).get(rent_order.type)
+        property_type = dict(rent_order.fields_get()['type']['selection']).get(rent_order.type)
         return request.render('property.portal_my_home_rent_views', {'rent_order': rent_order,
-                                                                     'type': type,
+                                                                     'type': property_type,
                                                                      'page_name': 'rent-order'})
