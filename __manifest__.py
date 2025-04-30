@@ -3,7 +3,7 @@
 {
     'name': "Property",
     'version': '1.0',
-    'depends': ['base', 'mail', 'contacts', 'account', 'hr','website'],
+    'depends': ['base', 'mail', 'contacts', 'account', 'hr','website','product','point_of_sale'],
     'author': "STARLIN",
     'category': 'All',
     'description': """
@@ -29,6 +29,9 @@
         'views/rent_management_views.xml',
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
+
+        'views/product_template_views.xml',
+
         'views/rent_website_template.xml',
         'views/thank_you_page.xml',
         'views/portal_template.xml',
@@ -48,5 +51,12 @@
             'property/static/src/xml/properties_snippet_template.xml',
             'property/static/src/js/properties_snippet.js',
         ],
+        'point_of_sale._assets_pos': [
+            'property/static/src/xml/pos_button.xml',# test
+        ],
+        # 'point_of_sale._assets': [
+        #     'property/static/src/js/extra_field.js',# test
+        #     'property/static/src/xml/extra_fieldss.xml',# test
+        # ],
     },
 }
