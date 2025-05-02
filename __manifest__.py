@@ -52,10 +52,13 @@
             'property/static/src/js/properties_snippet.js',
         ],
         'point_of_sale._assets_pos': [
-            'property/static/src/xml/pos_button.xml',# test
+            'property/static/src/xml/pos_product_rating.xml',# test
+            'property/static/src/js/product_card_rating.js',# test
+            'property/static/src/js/orderline_receipt.js',# test
+            # 'property/static/src/js/test.js',# test
         ],
-        # 'point_of_sale._assets': [
-        #     'property/static/src/js/extra_field.js',# test
+        # 'point_of_sale.assets': [
+        #     'property/static/src/js/test.js',# test
         #     'property/static/src/xml/extra_fieldss.xml',# test
         # ],
     },
