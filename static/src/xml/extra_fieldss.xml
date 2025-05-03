@@ -1,6 +1,0 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<t t-name="property.ProductWithCustomLabel" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension">-->
-<!--    <xpath expr="//div[contains(@class, 'product-name')]" position="after">-->
-<!--        <p t-if="product.custom_label" class="custom-label"> - <t t-esc="product.custom_label"/></p>-->
-<!--    </xpath>-->
-<!--</t>-->
