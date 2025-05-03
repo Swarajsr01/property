@@ -2,7 +2,7 @@
 <templates id="template" xml:space="preserve">
 <t t-name="OrderReceipt" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
         <xpath expr="//li[hasclass('price-per-unit')]" position="after">
-            <div style="margin-top:2px;" class="d-flex ms-1">
+            <div t-if="productLine != 0" style="margin-top:2px;" class="d-flex ms-1">
                 <t t-foreach="Array(productLine).fill(0)" t-as="star" t-index="i" t-key="star_index">
                     <span class="text-warning">★</span>
                 </t>

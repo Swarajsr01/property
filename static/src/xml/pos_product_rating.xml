@@ -7,7 +7,7 @@
     <!--    </t>-->
     <t t-name="ProductCard" t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
         <xpath expr="//div[hasclass('product-information-tag')]" position="before">
-            <div style="margin-top:2px;" class="d-flex position-absolute ms-1">
+            <div t-if="PriorityStar != 0" style="margin-top:2px;" class="d-flex position-absolute ms-1">
                 <t t-foreach="Array(PriorityStar).fill(0)" t-as="star" t-index="i"
                    t-key="star_index">
                     <span class="text-warning">★</span>
