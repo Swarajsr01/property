@@ -29,6 +29,7 @@
         'views/rent_management_views.xml',
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
+        'views/res_config_settings_views.xml',
 
         'views/product_template_views.xml',
 
