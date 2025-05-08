@@ -57,6 +57,8 @@
             'property/static/src/xml/pos_order_line_rating.xml',
             'property/static/src/js/product_card_rating.js',
             'property/static/src/js/orderline_receipt.js',
+            'property/static/src/js/category_discount_limit.js',
+            # 'property/static/src/js/pos_category_discount_loader.js',
         ],
     },
 }
