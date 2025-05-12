@@ -3,7 +3,7 @@
 {
     'name': "Property",
     'version': '1.0',
-    'depends': ['base', 'mail', 'contacts', 'account', 'hr','website','product','point_of_sale'],
+    'depends': ['base', 'mail', 'contacts', 'account', 'hr', 'website', 'product', 'point_of_sale'],
     'author': "STARLIN",
     'category': 'All',
     'description': """
@@ -29,7 +29,7 @@
         'views/rent_management_views.xml',
         'views/property_facilities_views.xml',
         'views/res_partner_views.xml',
-        'views/res_config_settings_views.xml',
+        # 'views/res_config_settings_views.xml',
 
         'views/product_template_views.xml',
 
@@ -57,8 +57,7 @@
             'property/static/src/xml/pos_order_line_rating.xml',
             'property/static/src/js/product_card_rating.js',
             'property/static/src/js/orderline_receipt.js',
-            'property/static/src/js/category_discount_limit.js',
-            # 'property/static/src/js/pos_category_discount_loader.js',
+
         ],
     },
 }

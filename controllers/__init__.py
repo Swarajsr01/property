@@ -4,4 +4,3 @@
 from . import main
 from . import website
 from . import snippet
-from . import pos

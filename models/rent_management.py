@@ -24,8 +24,8 @@ class RentManagement(models.Model):
                                   default=lambda self: self.env.user.company_id.currency_id.id)
     company_id = fields.Many2one('res.company', string='Company',
                                  default=lambda self: self.env.company, readonly=True)
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date', required=True)
+    start_date = fields.Date('Start Date', required=True, default=fields.Date.today)
+    end_date = fields.Date('End Date', required=True, default=fields.Date.today)
     payment_due_date = fields.Date('Payment Due Date', required=True, readonly=False)
     total_days = fields.Integer('Total Days')
     total_amount = fields.Monetary('Total Amount')
