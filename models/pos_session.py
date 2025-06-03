@@ -20,8 +20,7 @@ class PosSession(models.Model):
         for session in self:
             session.category_discount_limit = discount_amt
             session.category_discount_category_ids = [(6, 0, cat_ids)]
-        print(session.category_discount_category_ids)
-            
+
     @api.model
     def _load_pos_data_fields(self, config_id):
         params = super()._load_pos_data_fields(config_id)
